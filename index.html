@@ -1,0 +1,258 @@
+<!-- wmts endpoint: https://api.mapbox.com/styles/v1/antheali/cl2tk1fd7000215t7a4inneca/wmts?access_token=pk.eyJ1IjoiYW50aGVhbGkiLCJhIjoiY2wydGp3eHRyMDR6ZjNxbm9taWhmdHRrbSJ9.PaLgs9MdLUDuZHuErFc_RQ -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GEOG 458 Lab 4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.8);
+            border-style: solid;
+            border-width: 1px;
+            border-color: rgba(0, 0, 0, 0.2);
+            margin-left: 20px;
+            font-family: Arial, sans-serif;
+            overflow: auto;
+            border-radius: 3px;
+        }
+
+        #features {
+            top: 0;
+            height: 179px;
+            margin-top: 20px;
+            width: 391px;
+            padding: 0 10px 0 10px;
+        }
+
+        /* the style of the layer control menu */
+        #menu {
+            background: #fff;
+            position: absolute;
+            z-index: 1;
+            top: 10px;
+            right: 10px;
+            border-radius: 3px;
+            width: 120px;
+            border: 1px solid rgba(0, 0, 0, 0.4);
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        /* each layer on the menu */
+        #menu a {
+            font-size: 13px;
+            color: #404040;
+            display: block;
+            margin: 0;
+            padding: 0;
+            padding: 10px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+
+        /* the last item of the layer items will not include a seperator */
+        #menu a:last-child {
+            border: none;
+        }
+
+        /* change color and background color while a pointer is on an hybrid link. */
+        #menu a:hover {
+            background-color: #f8f8f8;
+            color: #404040;
+        }
+
+        #menu a.active {
+            background-color: #3887be;
+            color: #ffffff;
+        }
+
+        #menu a.active:hover {
+            background: #3074a4;
+        }
+    </style>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
+</head>
+
+<body>
+    <nav id="menu"></nav>
+    <div id='map'></div>
+    <div class='map-overlay' id='features'>
+        <h2>Map Design and Tile Generation</h2>
+        <div id='text-description'>
+            <p>There are four different tile layers that can be toggled on/off: a monochrome pink basemap, a map showing the motor vehicle theft occurences in Seattle in 2021, the motor vehicle theft data overlayed on the pink basemap, and a Pride theme basemap, respectively.</p>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoiYW50aGVhbGkiLCJhIjoiY2wydGp3eHRyMDR6ZjNxbm9taWhmdHRrbSJ9.PaLgs9MdLUDuZHuErFc_RQ';
+        let map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/dark-v10',
+            zoom: 12, // starting zoom
+            center: [-122.2559435, 47.6002614] // starting center
+        });
+
+        map.on('load', () => { //simplifying the function statement: arrow with brackets to define a function
+
+            map.addSource('tile1', {
+                'type': 'raster',
+                'tiles': [
+                    'tiles/tile1/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Anthea Li</a>'
+            });
+
+            map.addSource('tile2', {
+                'type': 'raster',
+                'tiles': [
+                    'tiles/tile2/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Anthea Li'
+            });
+
+            map.addSource('tile3', {
+                'type': 'raster',
+                'tiles': [
+                    'tiles/tile3/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Anthea Li'
+            });
+
+            map.addSource('tile4', {
+                'type': 'raster',
+                'tiles': [
+                    'tiles/tile4/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Anthea Li'
+            });
+
+            map.addLayer({
+                'id': 'tile1',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'tile1'
+            });
+
+            map.addLayer({
+                'id': 'tile2',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'tile2'
+            });
+
+            map.addLayer({
+                'id': 'tile3',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'tile3'
+            });
+
+            map.addLayer({
+                'id': 'tile4',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'tile4'
+            });
+
+            map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+            map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+        });
+
+
+        // After the last frame rendered before the map enters an "idle" state.
+        map.on('idle', () => {
+            // If these two layers were not added to the map, abort
+            if (!map.getLayer('tile1') || !map.getLayer('tile2') || !map.getLayer('tile3') || !map.getLayer('tile4')) {
+                return;
+            }
+
+            // Enumerate ids of the layers.
+            const toggleableLayerIds = ['tile1', 'tile2', 'tile3', 'tile4'];
+
+            // Set up the corresponding toggle button for each layer.
+            for (const id of toggleableLayerIds) {
+                // Skip layers that already have a button set up.
+                if (document.getElementById(id)) {
+                    continue;
+                }
+
+                // Create a link.
+                const link = document.createElement('a');
+                link.id = id;
+                link.href = '#';
+                link.textContent = id;
+                link.className = 'inactive';
+
+                // Show or hide layer when the toggle is clicked.
+                link.onclick = function (e) {
+                    const clickedLayer = this.textContent;
+                    // preventDefault() tells the user agent that if the event does not get explicitly handled, 
+                    // its default action should not be taken as it normally would be.
+                    e.preventDefault();
+                    // The stopPropagation() method prevents further propagation of the current event in the capturing 
+                    // and bubbling phases. It does not, however, prevent any default behaviors from occurring; 
+                    // for instance, clicks on links are still processed. If you want to stop those behaviors, 
+                    // see the preventDefault() method.
+                    e.stopPropagation();
+
+                    const visibility = map.getLayoutProperty(
+                        clickedLayer,
+                        'visibility'
+                    );
+
+                    // Toggle layer visibility by changing the layout object's visibility property.
+                    // if it is currently visible, after the clicking, it will be turned off.
+                    if (visibility === 'visible') {
+                        map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                        this.className = '';
+                    } else { //otherise, it will be turned on.
+                        this.className = 'active';
+                        map.setLayoutProperty(
+                            clickedLayer,
+                            'visibility',
+                            'visible'
+                        );
+                    }
+                };
+
+                // in the menu place holder, insert the layer links.
+                const layers = document.getElementById('menu');
+                layers.appendChild(link);
+            }
+        });
+    </script>
+</body>
+
+</html>
