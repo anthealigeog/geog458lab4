@@ -1,6 +1,7 @@
 # GEOG 458 Lab 4
 ## Anthea Li
 [Web map URL](https://anthealigeog.github.io/geog458lab4/)
+
 The examined geographic area is the Seattle area.
 
 ### Layer 1: Pink monochrome basemap
